@@ -1,2 +1,0 @@
-# autenticaciondjango
-dj + tailwind
