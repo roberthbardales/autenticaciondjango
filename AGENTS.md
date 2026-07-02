@@ -1,6 +1,6 @@
 # autenticaciondjango
 
-Sistema de autenticación con Django, roles y panel de usuario. Orientado a una clínica/hospital con roles: Administrador, Doctor, Recepción, Paciente.
+Sistema de autenticación genérico con Django, roles y panel de usuario. Roles: Administrador, Empleado, Cliente. Orientado a negocios.
 
 ---
 
@@ -38,8 +38,8 @@ autenticaciondjango/
 │   │   └── urls.py             # app_name = 'app_home'
 │   └── users/                  # App usuarios
 │       ├── models.py           # User custom
-│       ├── views.py            # Register, Login, Logout, UpdatePassword, Dashboard, ListaUsuarios
-│       ├── forms.py            # UserRegisterForm, LoginForm, UpdatePasswordForm
+│       ├── views.py            # Register, Login, Logout, UpdatePassword, Dashboard, ListaUsuarios, UserDetail, AdminEditUser, AdminResetPassword
+│       ├── forms.py            # UserRegisterForm, LoginForm, UpdatePasswordForm, AdminEditUserForm, AdminResetPasswordForm
 │       ├── urls.py             # app_name = 'app_users'
 │       ├── admin.py            # UserAdmin personalizado
 │       ├── managers.py         # UserManager
@@ -48,11 +48,14 @@ autenticaciondjango/
 ├── templates/
 │   ├── base.html               # Layout con Tailwind
 │   ├── home/index.html         # Landing page
-│   ├── users/register.html     # Registro
+│   ├── users/register.html     # Registro (admin completo / público solo Cliente)
 │   ├── users/login.html        # Login
-│   ├── users/dashboard.html    # Perfil
+│   ├── users/dashboard.html    # Perfil propio
 │   ├── users/cambiar_password.html
-│   ├── users/lista_usuarios.html
+│   ├── users/lista_usuarios.html  # Lista con badge "Tú" y fila resaltada
+│   ├── users/user_detail.html     # Detalle de usuario + botones editar/restablecer
+│   ├── users/admin_edit_user.html # Editar datos (Admin)
+│   ├── users/admin_reset_password.html # Restablecer contraseña (Admin)
 │   └── include/header.html, footer.html
 ├── static/                     # Creado, vacío
 ├── media/                      # Creado, vacío
@@ -72,7 +75,7 @@ autenticaciondjango/
 
 ### Choices
 
-**occupation**: `'0'` Administrador, `'1'` Paciente, `'2'` Recepción, `'3'` Doctor
+**occupation**: `'0'` Administrador, `'1'` Empleado, `'2'` Cliente
 **gender**: `'M'` Masculino, `'F'` Femenino, `'O'` Otro
 
 ## URLs
@@ -91,14 +94,26 @@ autenticaciondjango/
 | `/users/logout/` | `LogoutView` | `logout` |
 | `/users/update/` | `UpdatePasswordView` | `user-update` |
 | `/users/lista/` | `ListaUsuariosView` | `user-list` |
+| `/users/lista/<pk>/` | `UserDetailView` | `user-detail` |
+| `/users/lista/<pk>/editar/` | `AdminEditUserView` | `user-edit` |
+| `/users/lista/<pk>/password/` | `AdminResetPasswordView` | `user-reset-password` |
 
 ## Mixins de permisos
 
 - `AdministradorPermisoMixin` — solo `occupation == '0'`
-- `DoctorPermisoMixin` — Admin o Doctor
-- `RecepcionPermisoMixin` — Admin o Recepción
-- `PacientePermisoMixin` — Admin o Paciente
+- `EmpleadoPermisoMixin` — Admin o Empleado
+- `ClientePermisoMixin` — Admin o Cliente
 - `login_url` → `app_users:login`
+
+## Flujo de registro
+
+- **Público** (no autenticado): ve "Registrarse" en el header → formulario SIN campo ocupación → se crea como **Cliente** → auto-login + mensaje flash
+- **Admin** (logueado con `occupation == '0'`): ve "Nuevo usuario" en el header → formulario CON campo ocupación → puede elegir Admin/Empleado/Cliente
+
+## Protección de superusuarios
+
+- `ListaUsuariosView`: filtra `is_superuser=False` (no aparecen en la lista)
+- `UserDetailView`, `AdminEditUserView`, `AdminResetPasswordView`: devuelven `Http404` si el usuario es superuser
 
 ## Settings relevantes
 
@@ -117,6 +132,7 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
 - **Formularios**: widgets con clase `INPUT_CLASS` definida en `forms.py`
 - **Encoding**: todos los textos en español, UTF-8
 - **Mensajes flash**: mapeo de `message.tags` a colores Tailwind (success → verde, error → rojo, etc.)
+- **Logout**: mediante POST (CSRF protegido)
 
 ## Pendientes / Mejoras futuras
 

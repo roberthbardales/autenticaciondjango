@@ -10,4 +10,7 @@ urlpatterns = [
     path('update/', views.UpdatePasswordView.as_view(), name='user-update'),
     path('', views.DashboardView.as_view(), name='dashboard'),
     path('lista/', views.ListaUsuariosView.as_view(), name='user-list'),
+    path('lista/<int:pk>/', views.UserDetailView.as_view(), name='user-detail'),
+    path('lista/<int:pk>/editar/', views.AdminEditUserView.as_view(), name='user-edit'),
+    path('lista/<int:pk>/password/', views.AdminResetPasswordView.as_view(), name='user-reset-password'),
 ]

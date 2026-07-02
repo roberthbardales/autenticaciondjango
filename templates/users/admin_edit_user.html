@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}{% if admin_mode %}Nuevo usuario{% else %}Registro{% endif %} | Autenticación Django{% endblock %}
+{% block title %}Editar usuario | Autenticación Django{% endblock %}
 
 {% block content %}
 <div class="flex justify-center">
     <div class="w-full max-w-lg">
         <div class="bg-white rounded-lg shadow-sm border border-gray-100">
             <div class="p-6">
-                <h1 class="text-lg font-semibold mb-4 text-center">{% if admin_mode %}Registrar nuevo usuario{% else %}Crear cuenta{% endif %}</h1>
+                <h1 class="text-lg font-semibold mb-4">Editar usuario</h1>
+                <p class="text-sm text-gray-500 mb-4">{{ user.first_name }} {{ user.last_name }}</p>
                 <form method="post" novalidate>
                     {% csrf_token %}
 
@@ -44,7 +45,6 @@
                         {% endfor %}
                     </div>
 
-                    {% if admin_mode %}
                     <div class="flex flex-wrap -mx-2">
                         <div class="w-full md:w-1/2 px-2 mb-4">
                             <label for="{{ form.occupation.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Ocupación</label>
@@ -54,10 +54,6 @@
                             {% endfor %}
                         </div>
                         <div class="w-full md:w-1/2 px-2 mb-4">
-                    {% else %}
-                    <div class="flex flex-wrap -mx-2">
-                        <div class="w-full md:w-1/2 px-2 mb-4">
-                    {% endif %}
                             <label for="{{ form.gender.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Género</label>
                             {{ form.gender }}
                             {% for error in form.gender.errors %}
@@ -83,33 +79,12 @@
                         </div>
                     </div>
 
-                    <div class="flex flex-wrap -mx-2">
-                        <div class="w-full md:w-1/2 px-2 mb-4">
-                            <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
-                            {{ form.password1 }}
-                            {% for error in form.password1.errors %}
-                                <div class="text-red-500 text-sm mt-1">{{ error }}</div>
-                            {% endfor %}
-                        </div>
-                        <div class="w-full md:w-1/2 px-2 mb-4">
-                            <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Confirmar contraseña</label>
-                            {{ form.password2 }}
-                            {% for error in form.password2.errors %}
-                                <div class="text-red-500 text-sm mt-1">{{ error }}</div>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition mt-2" type="submit">{% if admin_mode %}Registrar usuario{% else %}Crear cuenta{% endif %}</button>
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition mt-2" type="submit">Guardar cambios</button>
                 </form>
-
-                {% if not admin_mode %}
-                <p class="text-center mt-4 text-sm text-gray-600">
-                    ¿Ya tienes cuenta?
-                    <a class="text-blue-600 hover:text-blue-700" href="{% url 'app_users:login' %}">Inicia sesión</a>
-                </p>
-                {% endif %}
             </div>
+        </div>
+        <div class="mt-4 text-center">
+            <a href="{% url 'app_users:user-detail' user.pk %}" class="text-sm text-blue-600 hover:text-blue-700">Cancelar</a>
         </div>
     </div>
 </div>

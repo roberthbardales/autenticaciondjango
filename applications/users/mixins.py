@@ -15,35 +15,24 @@ class AdministradorPermisoMixin(LoginRequiredMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
-class DoctorPermisoMixin(LoginRequiredMixin):
+class EmpleadoPermisoMixin(LoginRequiredMixin):
     login_url = reverse_lazy('app_users:login')
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return self.handle_no_permission()
-        if request.user.occupation not in [User.ADMINISTRADOR, User.DOCTOR]:
+        if request.user.occupation not in [User.ADMINISTRADOR, User.EMPLEADO]:
             return HttpResponseRedirect(reverse('app_users:login'))
         return super().dispatch(request, *args, **kwargs)
 
 
-class RecepcionPermisoMixin(LoginRequiredMixin):
+class ClientePermisoMixin(LoginRequiredMixin):
     login_url = reverse_lazy('app_users:login')
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return self.handle_no_permission()
-        if request.user.occupation not in [User.ADMINISTRADOR, User.RECEPCION]:
-            return HttpResponseRedirect(reverse('app_users:login'))
-        return super().dispatch(request, *args, **kwargs)
-
-
-class PacientePermisoMixin(LoginRequiredMixin):
-    login_url = reverse_lazy('app_users:login')
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return self.handle_no_permission()
-        if request.user.occupation not in [User.ADMINISTRADOR, User.PACIENTE]:
+        if request.user.occupation not in [User.ADMINISTRADOR, User.CLIENTE]:
             return HttpResponseRedirect(reverse('app_users:login'))
         return super().dispatch(request, *args, **kwargs)
 

@@ -5,9 +5,8 @@ from .managers import UserManager
 
 class User(AbstractBaseUser, PermissionsMixin):
     ADMINISTRADOR = '0'
-    PACIENTE = '1'
-    RECEPCION = '2'
-    DOCTOR = '3'
+    EMPLEADO = '1'
+    CLIENTE = '2'
 
     VARON = 'M'
     MUJER = 'F'
@@ -15,9 +14,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     OCCUPATION_CHOICES = (
         (ADMINISTRADOR, 'Administrador'),
-        (PACIENTE, 'Paciente'),
-        (RECEPCION, 'Recepcion'),
-        (DOCTOR, 'Doctor'),
+        (EMPLEADO, 'Empleado'),
+        (CLIENTE, 'Cliente'),
     )
 
     GENDER_CHOICES = (
