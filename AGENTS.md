@@ -143,6 +143,10 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
 - Implementar lógica de negocio en `services.py`
 - Usar `Pillow` para avatar/foto de perfil
 - Corregir typo `procesors` en comentario de settings
+- Agregar JWT (Django REST Framework + SimpleJWT):
+  - API paralela `/api/token/`, `/api/token/refresh/`, `/api/usuarios/`
+  - Web con sesiones sigue intacto
+  - Pendiente de definir alcance
 
 ## Comandos útiles
 

@@ -21,7 +21,7 @@
                     <a class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50" href="{% url 'app_users:user-list' %}">Usuarios</a>
                     <a class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50" href="{% url 'app_users:register' %}">Nuevo usuario</a>
                     {% endif %}
-                    <a class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50" href="{% url 'app_users:user-update' %}">Cambiar contraseña</a>
+
                     <a class="px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700" href="{% url 'app_users:dashboard' %}">Perfil</a>
                     <form action="{% url 'app_users:logout' %}" method="post" class="inline">
                         {% csrf_token %}
